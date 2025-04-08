@@ -5,6 +5,11 @@ import json
 import joblib
 import tensorflow as tf
 
+class_name={0:'BENIGN',7: 'FTP-Patator',11: 'SSH-Patator',1: 'Bot',10: 'PortScan'
+ ,12:'Web Attack � Brute Force',14: 'Web Attack � XSS',13:
+ 'Web Attack � Sql Injection',6: 'DoS slowloris',5:'DoS Slowhttptest'
+ ,4:'DoS Hulk',3: 'DoS GoldenEye',8: 'Heartbleed',2: 'DDoS',9: 'Infiltration'}
+
 app=Flask('ml-dl-hybrid-model')
 
 clf_xgb = joblib.load('../xgb_model.pkl')
@@ -28,7 +33,7 @@ def preprocess_input(df):
     X_mi=selector_mi.transform(features_ml)
     X_mi_scaled = scaler_pca.transform(X_mi)
     X_pca = pca.transform(X_mi_scaled)
-    X_final = scaler_final.transform(X_pca)
+    X_final = scaler.transform(X_pca)
 
     return X_final,features_lstm
 
@@ -41,8 +46,7 @@ def predict():
 
         X_final,features_lstm = preprocess_input(features)
 
-        dmatrix = xgb.DMatrix(X_final)
-        xgb_prediction = clf_xgb.predict(dmatrix)
+        xgb_prediction = clf_xgb.predict(X_final)
         xgb_probs = clf_xgb.predict_proba(X_final)
 
         threshold = 0.5
@@ -59,8 +63,9 @@ def predict():
 
 
         return jsonify({
-            "prediction":xgb_prediction.to_list(),
+            "prediction":xgb_prediction.tolist(),
             "predicted_class":predicted_class,
+            "class_name":class_name[predicted_class],
             "model_used":model_used,
             "confidence":float(max_prob),
         })
