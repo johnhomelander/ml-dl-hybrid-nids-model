@@ -108,13 +108,13 @@ def preprocess_input(df):
     arr = df_selected.values
 
     features_ml = arr
-    features_lstm = arr.reshape(arr.shape[0],1,arr.shape[1])
 
     X_mi=selector_mi.transform(features_ml)
     X_mi_scaled = scaler_pca.transform(X_mi)
     X_pca = pca.transform(X_mi_scaled)
     X_final = scaler.transform(X_pca)
 
+    features_lstm = X_final.reshape(X_final.shape[0],1,X_final.shape[1])
     return X_final,features_lstm
 
 
@@ -132,7 +132,7 @@ def predict():
         xgb_prediction = clf_xgb.predict(X_final)
         xgb_probs = clf_xgb.predict_proba(X_final)
 
-        threshold = 0.5
+        threshold = 0.6
         max_prob = np.max(xgb_probs)
 
         print(X_final)
@@ -158,4 +158,4 @@ def predict():
 
 
 if __name__=="__main__":
-    app.run(debug=True,host='0.0.0.0',port=5000)
+    app.run(debug=False,host='0.0.0.0',port=5000)
