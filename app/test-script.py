@@ -3,7 +3,7 @@ import numpy as np
 import json,requests
 import time
 
-df=pd.read_csv('../testing/2025-04-12_Flow.csv')
+df=pd.read_csv('../testing/2025-04-08_Flow.csv')
 columns_to_remove = ['Timestamp', 'Flow ID', 'Src IP', 'Dst IP', 'Protocol','Src Port','Label']
 df = df.drop(columns=[col for col in columns_to_remove if col in df.columns])
 url='http://127.0.0.1:5000/predict'
