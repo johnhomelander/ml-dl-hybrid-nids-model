@@ -92,13 +92,13 @@ feature_mapping = {
 
 app=Flask('ml-dl-hybrid-model')
 
-clf_xgb = joblib.load('../xgb_model.pkl')
-lstm_model = tf.keras.models.load_model('../best_lstm_model.h5')
+clf_xgb = joblib.load('../models/xgb_model.pkl')
+lstm_model = tf.keras.models.load_model('../models/best_lstm_model.h5')
 
-selector_mi = joblib.load('../selector_mi.pkl')
-scaler_pca = joblib.load('../scaler_pca.pkl')
-pca = joblib.load('../pca.pkl')
-scaler = joblib.load('../scaler.pkl')
+selector_mi = joblib.load('../models/selector_mi.pkl')
+scaler_pca = joblib.load('../models/scaler_pca.pkl')
+pca = joblib.load('../models/pca.pkl')
+scaler = joblib.load('../models/scaler.pkl')
 
 with open('features.json', 'r') as f:
     selected_features = json.load(f)['selected_features']
