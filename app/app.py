@@ -132,7 +132,7 @@ def predict():
         xgb_prediction = clf_xgb.predict(X_final)
         xgb_probs = clf_xgb.predict_proba(X_final)
 
-        threshold = 0.6
+        threshold = 0.55
         max_prob = np.max(xgb_probs)
 
         print(X_final)
