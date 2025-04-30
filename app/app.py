@@ -132,7 +132,7 @@ def predict():
         xgb_prediction = clf_xgb.predict(X_final)
         xgb_probs = clf_xgb.predict_proba(X_final)
 
-        threshold = 0.55
+        threshold = 0.7
         max_prob = np.max(xgb_probs)
 
         print(X_final)
@@ -140,19 +140,24 @@ def predict():
             prediction = lstm_model.predict(features_lstm)
             predicted_class = int(np.argmax(prediction, axis=1)[0])
             model_used="LSTM"
+            return jsonify({
+                "prediction":prediction,
+                "predicted_class":predicted_class,
+                "class_name":class_name[predicted_class],
+                "model_used":model_used,
+                #"confidence":float(max_prob),
+            })
 
         else:
             predicted_class = int(np.argmax(xgb_probs,axis=1)[0])
             model_used = "XGB"
-
-
-        return jsonify({
-            "prediction":xgb_prediction.tolist(),
-            "predicted_class":predicted_class,
-            "class_name":class_name[predicted_class],
-            "model_used":model_used,
-            "confidence":float(max_prob),
-        })
+            return jsonify({
+                "prediction":xgb_prediction.tolist(),
+                "predicted_class":predicted_class,
+                "class_name":class_name[predicted_class],
+                "model_used":model_used,
+                "confidence":float(max_prob),
+            })
     except Exception as e:
         return jsonify({"error":str(e)})
 
